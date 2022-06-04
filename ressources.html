@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<title>Thomas JAULGEY - Site Internet</title>
+<meta name="description" content="Thomas JAULGEY.">
+<link rel="stylesheet" href="style.css" />
+<script src="https://kit.fontawesome.com/62fbf63c9f.js" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<meta charset="utf-8">
+</head>
+
+<body>
+    <header><h1>Thomas JAULGEY</h1>
+        <nav class=menu>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
+                <li><a href="CV.html"><i class="fas fa-user"></i> Curriculum Vitae</a></li>
+                <li class=selected><a href="ressources.html"><i class="fas fa-folder-open"></i> Ressources</a></li>
+                <li><a href="mailto:thomas.jaulgey@telecom-st-etienne.fr?subject=CV%20Thomas%20JAULGEY"><i class="fas fa-at"></i> Contact Mail</a></li>
+            </ul>
+        </nav>
+    </header>
+   
+   
+   <div class=link>
+       <div class=linkdiv><h2>Fichiers / Dossiers à télécharger</h2><hr />
+           <ul>
+               <li><a href="TD_Arbres.pdf" download>CV (pdf)</a></li>
+               <li><a href="compresse.zip" download>Fichier .zip</a></li>
+               <li><a href="photoCV.png" download>photo d'identité</a></li>
+               <li><a href="https://thomasjaulgey.fr" target=_blank>Easter Egg</a></li>
+            </ul>
+        </div>
+       <div class=linkdivVideo><h2>Vidéo</h2><hr />
+           <video controls  style="width:50%;">
+             <source src="mov_bbb.mp4" type="video/mp4">
+           Your browser does not support the video tag.
+           </video>
+        </div>
+       <div class=linkdiv><h2>Exemple de code</h2><hr />
+           <pre>
+
+               #include "fictionalcharacter.h"
+
+               #include &lt;stdio.h&gt;
+               #include &lt;stdlib.h&gt;
+               #include &lt;string.h&gt;
+
+               
+               database* load(char* filename) {
+                   
+                   database* db = new database;
+                   db->size = 0;
+                
+                   // count lines in the file
+                   FILE *fp = fopen(filename,"r");
+                   int ch=0;
+                   int lines=0;
+                   while(!feof(fp))
+                   {
+                       ch = fgetc(fp);
+                       if(ch == '\n')
+                       {
+                           lines++;
+                       }
+                   }
+                   fclose(fp);
+                   
+                   // create a static size array to hold fictional characters
+                   const int n = lines;
+                   db->table = new FictionalCharacter*[n];
+                   
+                   // re-read the file to parse each line and add them to the table
+                   FILE* csv = fopen(filename, "r");
+                   
+                   char line[1024];
+                   int i = 0;
+                   while (fgets(line, 1024, csv))
+                   {
+                       // let's point to the begining of the line
+                       char* current = line;
+                       
+                       // we look for the index of the first occurence of semi-column
+                       size_t field_len_name = strcspn(current, ";");
+                       // we allocate an empty string
+                       char* name = (char*)malloc(50);
+                       // we copy from "current" the first "field_len_name" characters into the "name" string
+                       strncpy(name, current, field_len_name);
+                       // do not forgot to end the string with \0 !
+                       name[field_len_name] = '\0';
+                       // prepare for the next value : point to the "field_len_name + 1" character in "line"
+                       current = &line[field_len_name + 1];
+                       
+                       // same process repeats for surname
+                       size_t field_len_surname = strcspn(current, ";");
+                       char* surname = (char*)malloc(50);
+                       strncpy(surname, current, field_len_surname);
+                       surname[field_len_surname] = '\0';
+                       current = &line[field_len_name + field_len_surname + 2];
+                       
+                       // same process repeats for booktitle
+                       size_t field_len_btitle = strcspn(current, ";");
+                       char* booktitle = (char*)malloc(50);
+                       strncpy(booktitle, current, field_len_btitle);
+                       booktitle[field_len_btitle] = '\0';
+                       current = &line[field_len_name + field_len_surname + field_len_btitle + 3];
+                       
+                       // same process repeats for age
+                       size_t field_len_age = strcspn(current, ";");
+                       char* age = (char*)malloc(50);
+                       strncpy(age, current, field_len_age);
+                       age[field_len_age] = '\0';
+                       
+                       // create a new fictional character and copy its field value
+                       FictionalCharacter* fc = new FictionalCharacter;
+                       fc->name = name;
+                       fc->surname = surname;
+                       fc->booktitle = booktitle;
+                       fc->age = atoi(age);
+                       
+                       // insert the fictional character into the table
+                       db->table[i] = fc;
+                       
+                       // increase the table size
+                       db->size = db->size + 1;
+                       
+                       // increment the line counter
+                       i++;
+
+                   }
+                   
+                   // close the opened file
+                   fclose(csv);
+                   
+                   return db;
+               }
+
+            </pre>
+        </div>
+    </div>
+   
+
+   <footer>
+       © All rights reserved<br />Thomas JAULGEY - 2020<br /><a href="mailto:thomas.jaulgey@telecom-st-etienne.fr?subject=CV%20Thomas%20JAULGEY">thomas.jaulgey@telecom-st-etienne.fr</a>
+   </footer>
+</body>
+</html>
+
